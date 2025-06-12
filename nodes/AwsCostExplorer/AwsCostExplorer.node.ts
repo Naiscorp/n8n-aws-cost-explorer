@@ -283,7 +283,7 @@ export class AwsCostExplorer implements INodeType {
 							];
 						}
 
-						if (serviceFilter) {
+						if (serviceFilter && serviceFilter.trim()) {
 							commandParams.Filter = {
 								Dimensions: {
 									Key: 'SERVICE',
