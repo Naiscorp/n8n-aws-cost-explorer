@@ -173,6 +173,33 @@ export class AwsCostExplorer implements INodeType {
 				default: ['UnblendedCost'],
 			},
 			{
+				displayName: 'Service Filter',
+				name: 'serviceFilter',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['costAndUsage'],
+						operation: ['get'],
+					},
+				},
+				default: '',
+				placeholder: 'MongoDB Atlas (pay-as-you-go)',
+				description: 'Filter by specific service name (optional)',
+			},
+			{
+				displayName: 'Group By Service',
+				name: 'groupByService',
+				type: 'boolean',
+				displayOptions: {
+					show: {
+						resource: ['costAndUsage'],
+						operation: ['get'],
+					},
+				},
+				default: true,
+				description: 'Group results by service name',
+			},
+			{
 				displayName: 'Dimension',
 				name: 'dimension',
 				type: 'options',
@@ -235,15 +262,37 @@ export class AwsCostExplorer implements INodeType {
 						const endDate = this.getNodeParameter('endDate', i) as string;
 						const granularity = this.getNodeParameter('granularity', i) as string;
 						const metrics = this.getNodeParameter('metrics', i) as string[];
+						const serviceFilter = this.getNodeParameter('serviceFilter', i) as string;
+						const groupByService = this.getNodeParameter('groupByService', i) as boolean;
 
-						const command = new GetCostAndUsageCommand({
+						const commandParams: any = {
 							TimePeriod: {
 								Start: startDate,
 								End: endDate,
 							},
 							Granularity: granularity as any,
 							Metrics: metrics,
-						});
+						};
+
+						if (groupByService) {
+							commandParams.GroupBy = [
+								{
+									Type: 'DIMENSION',
+									Key: 'SERVICE',
+								},
+							];
+						}
+
+						if (serviceFilter) {
+							commandParams.Filter = {
+								Dimensions: {
+									Key: 'SERVICE',
+									Values: [serviceFilter],
+								},
+							};
+						}
+
+						const command = new GetCostAndUsageCommand(commandParams);
 
 						const response = await client.send(command);
 						returnData.push(response as unknown as IDataObject);
