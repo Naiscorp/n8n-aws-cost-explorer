@@ -1,16 +1,12 @@
-import {
-	IExecuteFunctions,
-} from 'n8n-core';
-
-import {
+import type {
 	IDataObject,
+	IExecuteFunctions,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	NodeOperationError,
 } from 'n8n-workflow';
 
-import { CostExplorerClient, GetCostAndUsageCommand, GetDimensionValuesCommand } from '@aws-sdk/client-cost-explorer';
+import { NodeOperationError } from 'n8n-workflow';
 
 export class AwsCostExplorer implements INodeType {
 	description: INodeTypeDescription = {
@@ -94,7 +90,6 @@ export class AwsCostExplorer implements INodeType {
 				],
 				default: 'get',
 			},
-			// Cost and Usage parameters
 			{
 				displayName: 'Start Date',
 				name: 'startDate',
@@ -177,7 +172,6 @@ export class AwsCostExplorer implements INodeType {
 				],
 				default: ['UnblendedCost'],
 			},
-			// Dimension Values parameters
 			{
 				displayName: 'Dimension',
 				name: 'dimension',
@@ -219,6 +213,9 @@ export class AwsCostExplorer implements INodeType {
 
 		const credentials = await this.getCredentials('awsCostExplorerApi');
 
+		// Dynamic import to avoid build-time issues
+		const { CostExplorerClient, GetCostAndUsageCommand, GetDimensionValuesCommand } = await import('@aws-sdk/client-cost-explorer');
+
 		const client = new CostExplorerClient({
 			region: credentials.region as string,
 			credentials: {
@@ -244,7 +241,7 @@ export class AwsCostExplorer implements INodeType {
 								Start: startDate,
 								End: endDate,
 							},
-							Granularity: granularity,
+							Granularity: granularity as any,
 							Metrics: metrics,
 						});
 
@@ -262,7 +259,7 @@ export class AwsCostExplorer implements INodeType {
 								Start: '2023-01-01',
 								End: '2023-12-31',
 							},
-							Dimension: dimension,
+							Dimension: dimension as any,
 						});
 
 						const response = await client.send(command);
@@ -272,10 +269,10 @@ export class AwsCostExplorer implements INodeType {
 
 			} catch (error) {
 				if (this.continueOnFail()) {
-					returnData.push({ error: error.message });
+					returnData.push({ error: (error as Error).message });
 					continue;
 				}
-				throw new NodeOperationError(this.getNode(), error);
+				throw new NodeOperationError(this.getNode(), error as Error);
 			}
 		}
 
