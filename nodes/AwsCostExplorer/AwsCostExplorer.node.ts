@@ -69,7 +69,7 @@ export class AwsCostExplorer implements INodeType {
 				default: 'get',
 			},
 			{
-				displayName: 'Operation 1',
+				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
 				noDataExpression: true,
