@@ -96,7 +96,7 @@ export class AwsCostExplorer implements INodeType {
 				type: 'string',
 				displayOptions: {
 					show: {
-						resource: ['costAndUsage'],
+						resource: ['costAndUsage', 'dimensionValues'],
 						operation: ['get'],
 					},
 				},
@@ -111,7 +111,7 @@ export class AwsCostExplorer implements INodeType {
 				type: 'string',
 				displayOptions: {
 					show: {
-						resource: ['costAndUsage'],
+						resource: ['costAndUsage', 'dimensionValues'],
 						operation: ['get'],
 					},
 				},
@@ -201,36 +201,6 @@ export class AwsCostExplorer implements INodeType {
 					},
 				],
 				default: 'SERVICE',
-				required: true,
-			},
-			{
-				displayName: 'Start Date',
-				name: 'startDate',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['dimensionValues'],
-						operation: ['get'],
-					},
-				},
-				default: '',
-				placeholder: '2023-01-01',
-				description: 'Start date in YYYY-MM-DD format',
-				required: true,
-			},
-			{
-				displayName: 'End Date',
-				name: 'endDate',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['dimensionValues'],
-						operation: ['get'],
-					},
-				},
-				default: '',
-				placeholder: '2023-01-31',
-				description: 'End date in YYYY-MM-DD format',
 				required: true,
 			},
 		],
