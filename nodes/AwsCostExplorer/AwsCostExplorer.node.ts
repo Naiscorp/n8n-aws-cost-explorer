@@ -20,8 +20,8 @@ export class AwsCostExplorer implements INodeType {
 		defaults: {
 			name: 'AWS Cost Explorer',
 		},
-		inputs: ['main'],
-		outputs: ['main'],
+		inputs: ['main'] as any,
+		outputs: ['main'] as any,
 		credentials: [
 			{
 				name: 'awsCostExplorerApi',
