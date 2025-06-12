@@ -253,11 +253,13 @@ export class AwsCostExplorer implements INodeType {
 				if (resource === 'dimensionValues') {
 					if (operation === 'get') {
 						const dimension = this.getNodeParameter('dimension', i) as string;
+						const startDate = this.getNodeParameter('startDate', i, '') as string;
+						const endDate = this.getNodeParameter('endDate', i, '') as string;
 
 						const command = new GetDimensionValuesCommand({
 							TimePeriod: {
-								Start: '2023-01-01',
-								End: '2023-12-31',
+								Start: startDate || '2023-01-01',
+								End: endDate || '2023-12-31',
 							},
 							Dimension: dimension as any,
 						});
