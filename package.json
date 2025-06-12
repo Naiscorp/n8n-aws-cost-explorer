@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-aws-cost-explorer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "N8N node for AWS Cost Explorer to retrieve cost and usage data",
   "keywords": [
     "n8n-community-node-package",
@@ -50,4 +50,4 @@
   "dependencies": {
     "@aws-sdk/client-cost-explorer": "^3.0.0"
   }
-} 
+}
