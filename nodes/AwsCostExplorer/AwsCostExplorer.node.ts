@@ -43,6 +43,10 @@ export class AwsCostExplorer implements INodeType {
 						name: 'Dimension Values',
 						value: 'dimensionValues',
 					},
+					{
+						name: 'Total Cost',
+						value: 'totalCost',
+					},
 				],
 				default: 'costAndUsage',
 			},
@@ -313,6 +317,25 @@ export class AwsCostExplorer implements INodeType {
 							Dimension: dimension as any,
 						});
 
+						const response = await client.send(command);
+						returnData.push(response as unknown as IDataObject);
+					}
+				}
+
+				if (resource === 'totalCost') {
+					if (operation === 'get') {
+						const startDate = this.getNodeParameter('startDate', i) as string;
+						const endDate = this.getNodeParameter('endDate', i) as string;
+						const granularity = this.getNodeParameter('granularity', i) as string;
+						const metrics = this.getNodeParameter('metrics', i) as string[];
+						const command = new GetCostAndUsageCommand({
+							TimePeriod: {
+								Start: startDate,
+								End: endDate,
+							},
+							Granularity: granularity as any,
+							Metrics: metrics,
+						});
 						const response = await client.send(command);
 						returnData.push(response as unknown as IDataObject);
 					}
