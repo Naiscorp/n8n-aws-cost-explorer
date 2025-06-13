@@ -188,7 +188,7 @@ export class AwsCostExplorer implements INodeType {
 				},
 				default: '',
 				placeholder: 'MongoDB Atlas (pay-as-you-go)',
-				description: 'Filter by specific service name (optional)',
+				description: 'Filter by specific service name. Leave empty to get total costs for all services.',
 			},
 			{
 				displayName: 'Group By Service',
@@ -200,8 +200,8 @@ export class AwsCostExplorer implements INodeType {
 						operation: ['get'],
 					},
 				},
-				default: true,
-				description: 'Group results by service name',
+				default: false,
+				description: 'Group results by service name to see cost breakdown per service',
 			},
 			{
 				displayName: 'Dimension',
